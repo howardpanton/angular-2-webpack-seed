@@ -4,7 +4,7 @@ base: ./dist/
 root: ./dist/index.html
 env: development
 url: http://localhost
-port: :8080
+port: 8080
 javascript: 
   input: ./src/**/*.js
   output: ./dist/**/*.js

@@ -272,7 +272,7 @@ export class Gulpfile {
     @Task('open-browser')
     open() {
         return gulp.src(config.root)
-            .pipe($.open({uri: config.url + config.port}));
+            .pipe($.open({uri: config.url + ':' + config.port}));
     }
 
 
