@@ -1,5 +1,5 @@
 {
-  "name": "ui",
+  "name": "angular-2-webpack-seed",
   "version": "1.0.0",
   "description": "A webpack starter for angular 2",
   "scripts": {
@@ -16,12 +16,12 @@
   },
   "repository": {
     "type": "mercurial",
-    "url": "https://bitbucket.org/abilisoft/ui"
+    "url": "https://github.com/howardpanton/angular-2-webpack-seed"
   },
   "author": "Howard Panton",
   "license": "MIT",
   "bugs": {
-    "url": "https://bitbucket.org/abilisoft/ui"
+    "url": "https://github.com/howardpanton/angular-2-webpack-seed"
   },
   "dependencies": {
     "@angular/common": "2.0.0",
