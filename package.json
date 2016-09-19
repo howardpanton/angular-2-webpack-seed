@@ -1,7 +1,16 @@
 {
   "name": "angular-2-webpack-seed",
   "version": "1.0.0",
-  "description": "A webpack starter for angular 2",
+  "keywords": [
+    "angular2",
+    "webpack",
+    "typescript",
+    "gulp",
+    "karma",
+    "rollup",
+    "AoT"
+  ],
+  "description": "A webpack starter for angular 2 with Aot, Gulp and Rollup",
   "scripts": {
     "start": "npm run clean_node && concurrently \"npm run sass\" \"npm run webpack\" ",
     "sass": "gulp build-dev --env=development",
