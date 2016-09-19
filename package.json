@@ -12,17 +12,17 @@
   ],
   "description": "A webpack starter for angular 2 with Aot, Gulp and Rollup",
   "scripts": {
-    "start": "npm run clean_node && concurrently \"npm run sass\" \"npm run webpack\" ",
+    "start": "npm run clean-node && concurrently \"npm run sass\" \"npm run webpack\" ",
     "sass": "gulp build-dev --env=development",
     "webpack": "webpack-dev-server --inline --progress --port 8080",
     "test": "karma start",
-    "build_aot": "gulp build-prod --env=production",
-    "build_webpack": "rimraf dist && webpack --config config/webpack.prod.js --progress --profile --bail",
+    "build-aot": "gulp build-prod --env=production",
+    "build-webpack": "rimraf dist && webpack --config config/webpack.prod.js --progress --profile --bail",
     "pree2e": "webdriver-manager update",
     "e2e": "protractor",
     "aot": "node_modules/.bin/ngc -p ./src/tsconfig.aot.json",
     "rollup": "node_modules/.bin/rollup -c rollup.js",
-    "clean_node": "rm -rf node_modules/@types",
+    "clean-node": "rm -rf node_modules/@types",
     "postinstall": "typings install"
   },
   "repository": {
