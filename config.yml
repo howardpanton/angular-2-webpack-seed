@@ -1,0 +1,81 @@
+--- 
+app: ./src/app/
+base: ./dist/
+root: ./dist/index.html
+env: development
+url: http://localhost
+port: :8080
+javascript: 
+  input: ./src/**/*.js
+  output: ./dist/**/*.js
+html:
+  input: ./src/**/*.html
+libraryTypeScriptDefinitions: ./typings/index.d.ts
+bower_components: 
+  file: ./bower.json
+  base: ./libs/
+  ignore: /dist
+  input: 
+    - libs/jquery/dist/jquery.min.js
+  output: dist/libs
+node_modules: 
+  base: node_modules
+  input: 
+    - node_modules/core-js/client/shim.min.+(js|js.map)
+    - node_modules/zone.js/dist/zone.js
+    - node_modules/reflect-metadata/Reflect.+(js|js.map)
+    - node_modules/systemjs/dist/system.src.js
+    - node_modules/@angular/core/bundles/core.umd.js
+    - node_modules/@angular/common/bundles/common.umd.js
+    - node_modules/@angular/compiler/bundles/compiler.umd.js
+    - node_modules/@angular/platform-browser/bundles/platform-browser.umd.js
+    - node_modules/@angular/platform-browser-dynamic/bundles/platform-browser-dynamic.umd.js
+    - node_modules/@angular/http/bundles/http.umd.js
+    - node_modules/@angular/router/bundles/router.umd.js
+    - node_modules/@angular/forms/bundles/forms.umd.js
+    - node_modules/rxjs/**/*
+    - node_modules/angular2-in-memory-web-api
+  output: dist/node_modules
+  typings: node_modules/@types/
+src: ./src
+styles: 
+  input:
+    - src/assets/sass/**/*.scss
+  output: public/css
+typescript: 
+  input: ./src/app/**/*.ts
+  output: ./dist/
+typings: ./typings/
+dependencies_angularjs:
+  input:
+    - node_modules/core-js/client/shim.min.+(js|js.map)
+    - node_modules/zone.js/dist/zone.js
+    - node_modules/reflect-metadata/Reflect.+(js|js.map)
+    - node_modules/systemjs/dist/system.src.js
+dependencies_js:
+  input:
+    - dist/build.js   
+dependencies_css:
+  input:
+    - ./dist/public/css/**.css
+template:
+  input:
+    - tmp/**.component.**.*
+    - tmp/**.component.*
+    - tmp/**.class.**.*
+    - tmp/**.class.*
+    - tmp/**.directive.**.*
+    - tmp/**.directive.*
+    - tmp/**.pipe.**.*
+    - tmp/**.pipe.*
+    - tmp/**.interface.*
+clean:
+  input:
+    - ./dist
+    - ./src/node_modules
+    - ./src/main.+(js|js.map)
+    - ./src/**/**.ngfactory.*
+    - ./src/**/**.shim.*
+    - ./src/**/*.+(js|js.map)
+
+

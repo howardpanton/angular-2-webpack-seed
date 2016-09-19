@@ -1,0 +1,8 @@
+{   
+    "injectChanges": true,
+    "files" : "./dist/**/**/*.{js, html, css}",
+    "server" : { "baseDir" : "./dist" },
+    "https" : true,
+    "open" : true,
+    "browser" : "google-chrome"
+}
