@@ -8,7 +8,7 @@
     "webpack": "webpack-dev-server --inline --progress --port 8080",
     "test": "npm run clean-node && karma start",
     "posttest": "npm run coverage",
-    "coverage": "npm run coverage:remap && gulp connect-test",
+    "coverage": "npm run coverage:remap",
     "coverage:remap": "remap-istanbul -i ./report/coverage/coverage-final.json -o ./report/coverage/html-report -t html",
     "build-aot": "gulp build-prod --env=production",
     "build-webpack": "node_modules/.bin/rimraf dist && webpack --config config/webpack.prod.js --progress --profile --bail",
