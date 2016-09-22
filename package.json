@@ -17,7 +17,8 @@
     "aot": "node_modules/.bin/ngc -p ./src/tsconfig.aot.json",
     "rollup": "node_modules/.bin/rollup -c rollup.js",
     "clean-node": "node_modules/.bin/rimraf node_modules/@types && node_modules/.bin/rimraf report",
-    "postinstall": "typings install"
+    "postinstall": "typings install",
+    "build-test": "npm run clean-node && karma start"
   },
   "repository": {
     "type": "mercurial",
