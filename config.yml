@@ -1,10 +1,14 @@
 --- 
+author: Howard Panton
+company: cobe.io
 app: ./src/app/
 base: ./dist/
 root: ./dist/index.html
 env: development
 url: http://localhost
 port: 8080
+test: ./report/coverage/html-report
+test_port: 5000
 javascript: 
   input: ./src/**/*.js
   output: ./dist/**/*.js
@@ -69,6 +73,7 @@ template:
     - tmp/**.pipe.**.*
     - tmp/**.pipe.*
     - tmp/**.interface.*
+  clean: ./tmp
 clean:
   input:
     - ./dist

@@ -1,7 +1,8 @@
 typings
 src/**/*.js
 src/**/*.map
-node_modules
+./node_modules
 jspm_packages
 bower_components
-libs
+./libs
+dist

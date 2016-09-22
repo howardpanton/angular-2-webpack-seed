@@ -1,19 +1,19 @@
 export const componentTemplate = { 'component': `
-    import { Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
-    @Component({
+@Component({
     selector: 'as-my-<%= selector %>',
     templateUrl: './<%= selector %>.component.html',
     styleUrls: ['./<%= selector %>.component.css']
-    })
-    export class <%= name %>Component implements OnInit {
+})
+export class <%= name %>Component implements OnInit {
 
-        constructor() {}
+    constructor() {}
 
-        ngOnInit() {
-        }
-
+    ngOnInit() {
     }
+
+}
 
 `,
 'css': '',

@@ -5,4 +5,11 @@ import '../../public/css/styles.css';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent { }
+export class AppComponent {
+    title = 'app works!';
+    foo = 'bar';
+ }
+
+function doSomething() {
+    console.log('foo');
+}

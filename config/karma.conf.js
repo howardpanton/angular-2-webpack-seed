@@ -4,7 +4,7 @@ module.exports = function (config) {
   var _config = {
     basePath: '',
 
-    frameworks: ['jasmine'],
+    frameworks: ['jasmine', 'source-map-support'],
 
     files: [
       {pattern: './config/karma-test-shim.js', watched: false}
@@ -24,7 +24,14 @@ module.exports = function (config) {
       noInfo: true
     },
 
-    reporters: ['progress'],
+    coverageReporter: {
+        dir: 'report/',
+        reporters: [
+            {type: 'json', subdir: 'coverage'}
+        ]
+    },
+
+    reporters: ['mocha', 'coverage'],
     port: 9876,
     colors: true,
     logLevel: config.LOG_INFO,

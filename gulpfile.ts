@@ -1,18 +1,14 @@
 import { Gulpclass, Task, SequenceTask  } from 'gulpclass/Decorators';
-import { classTemplate }  from './templates/class_template';
-import { componentTemplate }  from './templates/component_template';
-import { directiveTemplate }  from './templates/directive_template';
-import { interfaceTemplate }  from './templates/interface_template';
-import { serviceTemplate }  from './templates/service_template';
-import { pipeTemplate }  from './templates/pipe_template';
-import { mainDevelopmentTemplate }  from './templates/main-development_template';
-import { mainProductionTemplate }  from './templates/main-production_template';
+import { ensureImport, setTemplateFiles }  from './templates/';
 
 const _ = require('lodash');
 
-/** Main gulp imports will be moved */
+const yaml = require('read-yaml');
+
 const gulp = require('gulp');
+
 const del = require('del');
+
 const args = require('yargs')
     .option('c', {
         alias: 'component',
@@ -49,14 +45,26 @@ const args = require('yargs')
         type: 'string'
     }).argv;
 
-const $ = require('gulp-load-plugins')({lazy: true,  rename: {
-    'gulp-add-src': 'src',
-    'gulp-clean-css': 'cleancss'
-  }
-});
+const $ = require('gulp-load-plugins')
+        ({
+            lazy: true,
+            rename: {
+                'gulp-add-src': 'src',
+                'gulp-clean-css': 'cleancss'
+            }
+        });
+
 const wiredep = require('wiredep').stream;
 
+// Set config from JSON file 
+const config = yaml.sync('./config.yml');
 
+// $.exec report options
+const reportOptions = {
+    err: true,
+    stderr: true,
+    stdout: true
+  };
 
 /**
  * Log Message function (params:any)
@@ -74,29 +82,6 @@ function log(msg: any) {
     }
 }
 
-/**
- * Set Config function
- * Used to set the configuration variabels for the Gulp Tasks
- */
-function  setConfig() {
-    console.log('am i running');
-    gulp.src('./config.yml')
-        .pipe($.yaml())
-        .pipe($.print())
-        .pipe(gulp.dest('.'));
-}
-
-/* Run Configuration */
-setConfig();
-
-/* Set config from JSON file */
-const config = require('./config.json');
-
-const reportOptions = {
-    err: true, // default = true, false means don't write err 
-    stderr: true, // default = true, false means don't write stderr 
-    stdout: true // default = true, false means don't write stdout 
-}
 
 /** 
  * Main Gulp Tasks - Will move to sepaerate folder
@@ -104,61 +89,21 @@ const reportOptions = {
 @Gulpclass()
 export class Gulpfile {
 
-    /* ToDos */
-    // Build Task
-    // Unit test Task
-    // Deploy Task
-    // E2E Task
-    // Image Task
-    // Update ENV from CLI
-    /* Compile Sass files */
+    // Used for setting current generate file name
+    // See generate-files
     argName = {
         value: ''
     };
 
+    // This Task is used to generate new Angular files
+    // This will create files in ./src/gallery
     @Task('generate-files')
     generateFiles() {
-        let files: any;
-        // gulp generate --component gallery
-        if (_.has(args, 'component')) {
-            this.argName.value = _.get(args, 'component');
-            files = [
-            {name: this.argName.value + '.component.ts', content: componentTemplate.component, type: this.argName.value},
-            {name: this.argName.value + '.component.css', content: componentTemplate.css, type: this.argName.value},
-            {name: this.argName.value + '.component.html', content: componentTemplate.html, type: this.argName.value},
-            {name: this.argName.value + '.component.spec.ts', content: componentTemplate.test, type: this.argName.value}
-            ];
-        } else if (_.has(args, 'service')) {
-            this.argName.value = _.get(args, 'service');
-            files = [
-            {name: this.argName.value + '.service.ts', content: serviceTemplate.component, type: this.argName.value},
-            {name: this.argName.value + '.service.spec.ts', content: serviceTemplate.test, type: this.argName.value}
-            ];
-        } else if (_.has(args, 'class')) {
-            this.argName.value = _.get(args, 'class');
-            files = [
-            {name: this.argName.value + '.class.ts', content: classTemplate.component, type: this.argName.value},
-            {name: this.argName.value + '.class.spec.ts', content: classTemplate.test, type: this.argName.value}
-            ];
-        } else if (_.has(args, 'directive')) {
-            this.argName.value = _.get(args, 'directive');
-            files = [
-            {name: this.argName.value + '.directive.ts', content: directiveTemplate.component, type: this.argName.value},
-            {name: this.argName.value + '.directive.spec.ts', content: directiveTemplate.test, type: this.argName.value}
-            ];
-        } else if (_.has(args, 'interface')) {
-            this.argName.value = _.get(args, 'interface');
-            files = [
-            {name: this.argName.value + '.interface.ts', content: interfaceTemplate.component, type: this.argName.value}
-            ];
-        } else if (_.has(args, 'pipe')) {
-            this.argName.value = _.get(args, 'pipe');
-            files = [
-            {name: this.argName.value + '.pipe.ts', content: pipeTemplate.component, type: this.argName.value},
-            {name: this.argName.value + '.pipe.spec.ts', content: pipeTemplate.test, type: this.argName.value}
-            ];
-        }
-        return gulp.src('./tmp/index.ts', {base: './tmp'})
+        // Create an Array of files
+        let files = setTemplateFiles(args).files;
+        this.argName = setTemplateFiles(args).argName;
+
+        return gulp.src('./templates/index.ts', {base: './templates'})
         .pipe($.foreach(function(stream: any, f: any){
             files.forEach(function(gfile: any){
                 stream
@@ -171,11 +116,14 @@ export class Gulpfile {
 
     }
 
+    // Lightweight scaffolding task for Angular
+    // gulp generate --component --service --pipe --directive --interface --enum --class name
     @SequenceTask()
     generate() {
         return ['generate-files', 'generate-copy', 'generate-clean'];
     }
 
+    // Sass task for files stored in ./src/assets/sass
     @Task('sass')
     sass() {
         log('Compiling Sass files');
@@ -186,9 +134,9 @@ export class Gulpfile {
             .pipe($.sass.sync({outputStyle: 'expanded'}))
             .pipe($.sass().on('error', $.sass.logError))
             .pipe($.autoprefixer())
-            .pipe($.header('/** Cobe.io - main.css' +
+            .pipe($.header('/** Cobe.io - style.css' +
             '\n *' +
-            '\n' + ' * Author: Howard Panton' +
+            '\n' + ' * Author: ' + config.author +
             '\n' + ' * Last Updated:' + $.util.date('mmm d, yyyy h:MM:ss TT') +
             '\n *' +
             '*/\n' +
@@ -212,14 +160,14 @@ export class Gulpfile {
         .pipe(gulp.dest(config.bower_components.output));
     }
 
-    // copy dependencies
+    // Copies Js dependencies
     @Task('copy-js')
     copyJs() {
       return gulp.src(config.javascript.input)
         .pipe(gulp.dest(config.base));
     }
 
-   // copy html files
+   // Copies html files
     @Task('copy-html')
     copyHtml() {
       return gulp.src(config.html.input)
@@ -236,12 +184,10 @@ export class Gulpfile {
         .pipe( $.print());
     }
 
-
     @Task('generate-clean')
     generateClean() {
-        return del(config.template.input);
+        return del(config.template.clean);
     }
-
 
     /* Clean Dist folder */
     @Task('clean-all')
@@ -251,24 +197,31 @@ export class Gulpfile {
         });
     }
 
-    /* Clean Dist folder */
+    /* Replace env variable ./src/app/environment.ts */
     @Task('replace-env')
     replaceEnv() {
-        return gulp.src(['./src/app/'])
-        .pipe($.if(args.env === 'production', 
-            $.exec("sed -i.bak 's/false/true/g' ./src/app/environment.ts; touch ./src/app/app.module.ngfactory.ts")))
-        .pipe($.if(args.env === 'development', 
-            $.exec("sed -i.bak 's/true/false/g' ./src/app/environment.ts")))
-        .pipe($.exec.reporter(reportOptions))
-        .pipe($.if(args.env === 'production', 
-            $.file('./src/main.ts', mainProductionTemplate)))
-        .pipe($.if(args.env === 'development', 
-            $.file('./src/main.ts', mainDevelopmentTemplate)))
-        .pipe(gulp.dest('./', {cwd: './'}));
+        return gulp.src(['./src/app/environment.ts'])
+        .pipe($.if(args.env === 'production', $.replace('false', 'true')))
+        .pipe($.if(args.env === 'development', $.replace('true', 'false')))
+        .pipe(gulp.dest('./', {cwd: './src/app'}));
+    }
+
+    /* Update ./src/maint.ts based on the ENV variable  */
+    @Task('update-main')
+    updateMain() {
+        let importFile;
+
+        if (args.env === 'production') {
+            importFile = ensureImport.mainProductionTemplate;
+        } else if (args.env === 'development') {
+            importFile = ensureImport.mainDevelopmentTemplate;
+        }
+        return $.file('./src/main.ts', importFile, { src: true })
+            .pipe(gulp.dest('.'));
     }
 
 
-    /* Open Task in Chrome as  */
+    /* Open Task in Chrome Browser  */
     @Task('open-browser')
     open() {
         return gulp.src(config.root)
@@ -276,41 +229,41 @@ export class Gulpfile {
     }
 
 
-/**
- * Inject 
- */
-@Task('inject', ['sass'])
-inject() {
-    let injectOptions = {
-        ignorePath: config.bower_components.ignore
-    };
+    /**
+     * Inject CSS/JS into index.html
+     */
+    @Task('inject', ['sass'])
+    inject() {
+        let injectOptions = {
+            ignorePath: config.bower_components.ignore
+        };
 
-    let options = {
-        bowerjson: 'bower.json',
-        directory: config.bower_components.base,
-        ignorePath: '..'
-    };
+        let options = {
+            bowerjson: 'bower.json',
+            directory: config.bower_components.base,
+            ignorePath: '..'
+        };
 
-    return gulp.src('./src/index.html')
-        .pipe(wiredep(options))
-        .pipe($.inject(gulp.src(config.dependencies_js.input, {read: false}), injectOptions))
-        .pipe($.inject(gulp.src(config.dependencies_angularjs.input, {read: false}) ,{starttag: '<!-- inject:head:{{ext}} -->'}, injectOptions))
-        .pipe($.inject(gulp.src(config.dependencies_css.input, {read: false}), injectOptions))
-        .pipe(gulp.dest('./dist'));
-}
+        return gulp.src('./src/index.html')
+            .pipe(wiredep(options))
+            .pipe($.inject(gulp.src(config.dependencies_js.input, {read: false}), injectOptions))
+            .pipe($.inject(gulp.src(config.dependencies_angularjs.input, {read: false}) ,
+                {starttag: '<!-- inject:head:{{ext}} -->'}, injectOptions))
+            .pipe($.inject(gulp.src(config.dependencies_css.input, {read: false}), injectOptions))
+            .pipe(gulp.dest('./dist'));
+    }
 
 
     /* Watch Html files */
     @Task('watch')
     watch() {
-        // gulp.watch(config.typescript.input, ['compile-ts']);
         gulp.watch(config.styles.input, ['sass']);
-        // gulp.watch(config.html.input, ['copy-html']);
     }
 
     @Task('run-aot')
     runAot() {
         return gulp.src(['.'])
+        .pipe($.exec('touch ./src/app/app.module.ngfactory.ts'))
         .pipe($.exec('node_modules/.bin/ngc -p ./src/tsconfig.aot.json'))
         .pipe($.exec.reporter(reportOptions));
     }
@@ -351,7 +304,7 @@ inject() {
         .pipe($.htmlmin({collapseWhitespace: true}))
         .pipe(gulp.dest('./dist'));
     }
-    
+
     @Task('connect')
     connect() {
         $.connect.server({
@@ -362,34 +315,37 @@ inject() {
         });
     }
 
+    @Task('connect-test')
+    connectTest() {
+        $.connect.server({
+            root: config.test,
+            port: config.test_port,
+            https: false,
+            livereload: false
+        });
+    }
+
     // Builds out the Appliation for production
-    // Cleans and previous Factory files
-    // Set ENv to prod
-    // Copy files
-    // Inject Html
-    // Minify
-    // Gzip
-    // Start server Prod
     @SequenceTask('build-prod')
     buildProd() {
         return [
-                ['clean-all', 'replace-env'],
+                ['clean-all', 'replace-env', 'update-main'],
                 ['del-typings'],
                 ['run-aot'],
                 ['run-rollup'],
                 ['copy-libs', 'copy-bower', 'styles', 'images'],
                 ['inject'],
-                ['minify','connect', 'open-browser']
+                ['minify', 'connect', 'open-browser']
                 ];
-    } 
+    }
 
     @SequenceTask('build-dev')
     buildDev() {
         return [
-                ['clean-all', 'replace-env'],
+                ['clean-all', 'replace-env', 'update-main'],
                 ['watch',
                 'sass']
                 ];
-    } 
+    }
 
 }

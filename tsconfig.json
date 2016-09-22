@@ -16,5 +16,16 @@
     "typings/browser.d.ts",
     "typings/browser",
     "protractor.conf.js"
-  ]
+  ],
+    "filesGlob": [
+    "./src/app/**/*.ts",
+    "./typings/index.d.ts",
+    "!./node_modules/**"
+  ],
+  "awesomeTypescriptLoaderOptions": {
+    "resolveGlobs": true,
+    "forkChecker": true
+    },
+  "compileOnSave": false,
+  "buildOnSave": false
 }
