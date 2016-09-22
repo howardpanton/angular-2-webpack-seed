@@ -348,4 +348,9 @@ export class Gulpfile {
                 ];
     }
 
+    @Task()
+    default() {
+        return ['replace-env', 'update-main'];
+    }
+
 }

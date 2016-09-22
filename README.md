@@ -104,12 +104,12 @@ This will download the following files into your directory.
 `webpack.config.js` is the entrypoint for [Webpack](https://webpack.github.io/) build framework.
 
 
-## Setting up Node
+## Prerequisites
+
+* node v5.x.x or higher and npm 3 or higher.
 
  To get up and running with the UI repo you need the latest version of Node JS and NPM.
  
- Node Js min ver 4
- NPM min ver 3
 
 Make sure, that you have the supported versions of Node and NPM. If you have the
  older versions, uninstall node, download and install the required version.
@@ -126,23 +126,101 @@ Once Node has been installed you can check the version of Node JS by entering th
 ```
 node -v
 ```
+
+```
+npm install -g typescript
+```
+
+
+## Usage
+
 Next we need to install the `package.json` dependencies, enter the following command into terminal/Iterm.
 
-```
+```bash
+
+cd angular-2-webpack-seed
+
+# Install the project's dependencies
 npm install
+
+# Starts webpack development build and watches your files for changes
+# This will create a local devlopment server at http://locahost:8080
+npm start
+
+# Run karma tests with code coverage
+# Coverage is run using istanbul-remap, you can view the coverage report at http://locahost:5000
+npm test && npm run test-server
+
+# End to End tests with protractor
+# Run npm start first to create a local development server
+npm run e2e
+
+# Webpack build
+npm run build-webpack
+
+# AoT compilation and Rollup build
+npm run build-aot
+
 ```
-
-This will install a `node_modules` directory in the root of your repo.
-
-You should have all the depencies required to start building your application.
-
 
 ## Options
 
+YOu can scaffold Angular files and change the development environment
 
+```bash
 
-## Running the build
+# Create a new component
+# This will create a new Angular component in ./src/app/foo/foo.component.ts
+# It will also create the corresponding html, css and spec files.
+gulp generate --component foo
+
+# Create a new service
+# This will create a new Angular service in ./src/app/foo/foo.service.ts
+# It will also create the corresponding spec files.
+gulp generate --service foo
+
+# create a new class
+# This will create a new Angular class in ./src/app/foo/foo.class.ts
+# It will also create the corresponding spec files.
+gulp generate --class foo
+
+# create a new directive
+# This will create a new Angular directive in ./src/app/foo/foo.directive.ts
+# It will also create the corresponding spec files.
+gulp generate --directive foo
+
+# create a new interface
+# This will create a new Angular interface in ./src/app/foo/foo.interface.ts
+gulp generate --interface foo
+
+# create a new enum
+# This will create a new Angular enum in ./src/app/foo/foo.enum.ts
+# It will also create the corresponding spec files.
+gulp generate --enum foo
+
+# create a new pipe
+# This will create a new Angular pipe in ./src/app/foo/foo.pipe.ts
+# It will also create the corresponding spec files.
+gulp generate --pipe foo
+
+# Change the ENV variable to development
+gulp --env=development
+
+# Change the ENV variable to development
+gulp --env=production
+
+```
+## Tests
+
+Tests have been setup with Jasmine, Karma and Istanbul. Unit test should be stored
+in `/src/app/` within the corresponding folders.
+
+End to End tests should be stored in `./e2e/`
+
+## Builds
 
 The default task is `gulp` and this will start the build system and watch for any changes in the css/js/app folders.
 
 You should see a message when the default gulp task is running to say that browsersync has initialised on localhost:7000.
+
+## Issues

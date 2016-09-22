@@ -1,7 +1,6 @@
 var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
-var  ForkCheckerPlugin = require('awesome-typescript-loader').ForkCheckerPlugin;
 var helpers = require('./helpers');
 
 module.exports = {
@@ -56,11 +55,6 @@ module.exports = {
   },
 
     plugins: [
-
-    new ForkCheckerPlugin(),
-
-    new webpack.optimize.OccurenceOrderPlugin(true),
-
     new webpack.optimize.CommonsChunkPlugin({
         name: ['app', 'vendor', 'polyfills']
     }),

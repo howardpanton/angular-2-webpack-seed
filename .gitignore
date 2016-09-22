@@ -6,3 +6,7 @@ jspm_packages
 bower_components
 ./libs
 dist
+libs
+node_modules
+npm-debug.log
+report

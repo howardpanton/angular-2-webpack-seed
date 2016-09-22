@@ -11,14 +11,14 @@
     "coverage": "npm run coverage:remap",
     "coverage:remap": "remap-istanbul -i ./report/coverage/coverage-final.json -o ./report/coverage/html-report -t html",
     "build-aot": "gulp build-prod --env=production",
-    "build-webpack": "node_modules/.bin/rimraf dist && webpack --config config/webpack.prod.js --progress --profile --bail",
-    "pree2e": "webdriver-manager update",
-    "e2e": "protractor",
+    "build-webpack": "gulp replace-env --env=development && node_modules/.bin/rimraf dist && webpack --config config/webpack.prod.js --progress --profile --bail",
+    "pree2e": "node_modules/.bin/webdriver-manager update",
+    "e2e": "node_modules/.bin/protractor",
     "aot": "node_modules/.bin/ngc -p ./src/tsconfig.aot.json",
     "rollup": "node_modules/.bin/rollup -c rollup.js",
     "clean-node": "node_modules/.bin/rimraf node_modules/@types && node_modules/.bin/rimraf report",
     "postinstall": "typings install",
-    "build-test": "npm run clean-node && karma start"
+    "test-server": "gulp connect-test"
   },
   "repository": {
     "type": "mercurial",
@@ -129,7 +129,6 @@
     "tslint": "^3.15.1",
     "tslint-loader": "^2.1.5",
     "typescript": "^2.0.2",
-    "typescript-node": "^0.1.3",
     "typescript-register": "^1.1.0",
     "typescript-require": "^0.2.9-1",
     "typings": "^1.3.2",
