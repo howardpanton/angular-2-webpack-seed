@@ -1,15 +1,23 @@
-# Abilisoft UI repository
+# Angular 2 Webpack Seed
+
+![Image of Angular Logo](public/images/angular.png)
+
+[![Build Status](https://travis-ci.org/howardpanton/angular-2-webpack-seed.svg?branch=master)](https://travis-ci.org/howardpanton/angular-2-webpack-seed)
+[![Code Climate](https://codeclimate.com/github/howardpanton/angular-2-webpack-seed/badges/gpa.svg)](https://codeclimate.com/github/howardpanton/angular-2-webpack-seed)
+[![Test Coverage](https://codeclimate.com/github/howardpanton/angular-2-webpack-seed/badges/coverage.svg)](https://codeclimate.com/github/howardpanton/angular-2-webpack-seed/coverage)
 
 This project provides an [Angular 2](https://angular.io/) front-end and build system using [Webpack](https://webpack.github.io/) , [Rollup](http://rollupjs.org/) and [AoT](https://angular.io/docs/ts/latest/cookbook/aot-compiler.html).
+It was developed for the new [Cobe.io](https:cobeio) UI, and open sourced to provide a template for people starting out on Angular 2.
 
+[Demo](https://howardpanton.github.io/angular-2-webpack-seed/)
 
 ## Getting started
 
-To get up and running you need to fork the [UI Repository](https://bitbucket.org/abilisoft/ui) on Bitbucket.
+To get up and running you need to fork the [UI Repository](https://github.com/howardpanton/angular-2-webpack-seed/) on Bitbucket.
 
 The clone the repo locally.
 
-` hg clone ssh://hg@bitbucket.org/abilisoft/ui`
+` git clone https://github.com/howardpanton/angular-2-webpack-seed/`
 
 This will download the following files into your directory.
 
