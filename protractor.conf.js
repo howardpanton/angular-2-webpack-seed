@@ -3,11 +3,13 @@
 
 /*global jasmine */
 var SpecReporter = require('jasmine-spec-reporter');
+require('ts-node/register');
 
 exports.config = {
   allScriptsTimeout: 11000,
   specs: [
-    './e2e/**/*.e2e-spec.ts'
+    './e2e/**/*.e2e-spec.ts',
+    './e2e/*.e2e-spec.ts'
   ],
   capabilities: {
     'browserName': 'chrome'
@@ -21,11 +23,6 @@ exports.config = {
     print: function() {}
   },
   useAllAngular2AppRoots: true,
-  beforeLaunch: function() {
-    require('ts-node').register({
-      project: 'e2e'
-    });
-  },
   onPrepare: function() {
     jasmine.getEnv().addReporter(new SpecReporter());
   }
