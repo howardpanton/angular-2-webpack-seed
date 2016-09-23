@@ -31,6 +31,7 @@ export function setTemplateFiles(args: any) {
             argName.value = _.get(args, 'component');
             files = [
             {name: argName.value + '.component.ts', content: ensureImport.componentTemplate.component, type: argName.value},
+            {name: 'index.ts', content: ensureImport.componentTemplate.index, type: argName.value},
             {name: argName.value + '.component.css', content: ensureImport.componentTemplate.css, type: argName.value},
             {name: argName.value + '.component.html', content: ensureImport.componentTemplate.html, type: argName.value},
             {name: argName.value + '.component.spec.ts', content: ensureImport.componentTemplate.test, type: argName.value}
