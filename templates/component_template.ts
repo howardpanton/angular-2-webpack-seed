@@ -1,6 +1,6 @@
 export const componentTemplate = {
-'component': `
-import { Component, OnInit } from '@angular/core';
+'component':
+`import { Component, OnInit } from '@angular/core';
 
 @Component({
     selector: 'as-my-<%= selector %>',
@@ -17,13 +17,13 @@ export class <%= name %>Component implements OnInit {
 }
 
 `,
-'html': `
-<h1>
+'html':
+`<h1>
    <%= selector %> works!
 </h1>
 `,
-'test': `
-/* tslint:disable:no-unused-variable */
+'test':
+`/* tslint:disable:no-unused-variable */
 
 import { TestBed, async } from '@angular/core/testing';
 import { <%= name %>Component } from './<%= selector %>.component';
@@ -35,6 +35,9 @@ describe('Component: <%= name %>', () => {
   });
 });
 
+`,
+'index':
+`export * from './<%= selector %>.component';
 `,
 'css': ''
 
