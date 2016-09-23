@@ -21,13 +21,13 @@
     "test-server": "gulp connect-test"
   },
   "repository": {
-    "type": "mercurial",
-    "url": "https://bitbucket.org/abilisoft/ui"
+    "type": "git",
+    "url": "https://github.com/howardpanton/angular-2-webpack-seed"
   },
   "author": "Howard Panton",
   "license": "MIT",
   "bugs": {
-    "url": "https://bitbucket.org/abilisoft/ui"
+    "url": "https://github.com/howardpanton/angular-2-webpack-seed"
   },
   "dependencies": {
     "@angular/common": "2.0.0",
