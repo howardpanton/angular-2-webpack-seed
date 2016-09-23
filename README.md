@@ -13,7 +13,7 @@ It was developed for the new [Cobe.io](https:cobeio) UI, and open sourced to pro
 
 ## Getting started
 
-To get up and running you need to fork the [UI Repository](https://github.com/howardpanton/angular-2-webpack-seed/) on Bitbucket.
+To get up and running you need to fork the [UI Repository](https://github.com/howardpanton/angular-2-webpack-seed/) on Github.
 
 The clone the repo locally.
 
@@ -116,7 +116,7 @@ Make sure, that you have the supported versions of Node and NPM. If you have the
 NPM is already integrated in the Node installer, so you don’t have to worry about manually upgrading it.
 
 [Node JS](https://nodejs.org/) is a Node.js is a platform built on [Chrome's JavaScript runtime](http://code.google.com/p/v8/). 
-You can install Node from [here](http://nodejs.org/dist/v0.12.5/node-v0.12.5.pkg).
+You can install Node from [here](https://nodejs.org/downloads).
 
 Once Node has been installed you can check the version of Node JS by entering the following into terminal/iterm
 
@@ -228,13 +228,13 @@ End to End tests have been setup using protractor and should be stored in `./e2e
 
 ## Builds
 
-The UI uses two build systems, Webpack and Rollup, you could also builds using SystemJs and gulp, but this will need some modifications to the Gulp file.
+The UI uses two build systems, Webpack and Rollup, you could also builds using [SystemJs](https://angular.io/docs/ts/latest/quickstart.html) and gulp, but this will need some modifications to the Gulp file.
 You can run a build by typing the command `npm run build-webpack` or `npm run build-aot` this will start off the build process and clean up any unecessary files.
 
 The main difference in the build systems is that webpack chunks the files as it processes the build and creates 3 files `app.js' `vendor.js` and `pollyfill.js`.
 Webpack will also package any assets the application requires such as css or images.
 
-The rollup build uses es2015 tree-shaking to remove any unecessary modules and it creates a single build file in `./dist`. AoT compilation will also be doe pre-build.
+The rollup build uses es2015 tree-shaking to remove any unecessary modules and it creates a single build file in `./dist`. AoT compilation will also be done pre-build.
 
 All builds can be viewed by running `gulp connect open`, this will run a server at `localhost:8080`.
 
@@ -244,3 +244,5 @@ If you need to change any port or path settings you can edit `./comfig.yml`.
 ## Issues
 
 There is currently an issue with Angular 2 webpack and the NPM `@types` module. To get around this bug, the `node_modules/@types` directory is removed at build time.
+
+Feel free to fork and submit issues requests or let me know how the seed project can be improved.
