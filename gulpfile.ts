@@ -103,13 +103,13 @@ export class Gulpfile {
         let files = setTemplateFiles(args).files;
         this.argName = setTemplateFiles(args).argName;
 
-        return gulp.src('./templates/index.ts', {base: './templates'})
+        return gulp.src(config.template.src, {base: config.template.base})
         .pipe($.foreach(function(stream: any, f: any){
             files.forEach(function(gfile: any){
                 stream
                     .pipe($.file(gfile.name, gfile.content))
                     .pipe($.template({name: _.upperFirst(gfile.type), selector: gfile.type}))
-                    .pipe(gulp.dest('./tmp'));
+                    .pipe(gulp.dest(config.template.output));
             });
             return stream;
         }));
@@ -134,7 +134,7 @@ export class Gulpfile {
             .pipe($.sass.sync({outputStyle: 'expanded'}))
             .pipe($.sass().on('error', $.sass.logError))
             .pipe($.autoprefixer())
-            .pipe($.header('/** Cobe.io - style.css' +
+            .pipe($.header('/** ' + config.company + ' - style.css' +
             '\n *' +
             '\n' + ' * Author: ' + config.author +
             '\n' + ' * Last Updated:' + $.util.date('mmm d, yyyy h:MM:ss TT') +
@@ -180,7 +180,7 @@ export class Gulpfile {
     generateCopy() {
       return gulp.src(config.template.input)
         .pipe($.plumber())
-        .pipe(gulp.dest('./src/app/' + this.argName.value))
+        .pipe(gulp.dest(config.app + this.argName.value))
         .pipe( $.print());
     }
 
@@ -200,10 +200,10 @@ export class Gulpfile {
     /* Replace env variable ./src/app/environment.ts */
     @Task('replace-env')
     replaceEnv() {
-        return gulp.src(['./src/app/environment.ts'])
+        return gulp.src([config.app + 'environment.ts'])
         .pipe($.if(args.env === 'production', $.replace('false', 'true')))
         .pipe($.if(args.env === 'development', $.replace('true', 'false')))
-        .pipe(gulp.dest('./', {cwd: './src/app'}));
+        .pipe(gulp.dest('./', {cwd: config.app}));
     }
 
     /* Update ./src/maint.ts based on the ENV variable  */
@@ -216,10 +216,9 @@ export class Gulpfile {
         } else if (args.env === 'development') {
             importFile = ensureImport.mainDevelopmentTemplate;
         }
-        return $.file('./src/main.ts', importFile, { src: true })
+        return $.file(config.src + 'main.ts', importFile, { src: true })
             .pipe(gulp.dest('.'));
     }
-
 
     /* Open Task in Chrome Browser  */
     @Task('open-browser')
@@ -227,7 +226,6 @@ export class Gulpfile {
         return gulp.src(config.root)
             .pipe($.open({uri: config.url + ':' + config.port}));
     }
-
 
     /**
      * Inject CSS/JS into index.html
@@ -244,13 +242,13 @@ export class Gulpfile {
             ignorePath: '..'
         };
 
-        return gulp.src('./src/index.html')
+        return gulp.src(config.src + 'index.html')
             .pipe(wiredep(options))
             .pipe($.inject(gulp.src(config.dependencies_js.input, {read: false}), injectOptions))
             .pipe($.inject(gulp.src(config.dependencies_angularjs.input, {read: false}) ,
                 {starttag: '<!-- inject:head:{{ext}} -->'}, injectOptions))
             .pipe($.inject(gulp.src(config.dependencies_css.input, {read: false}), injectOptions))
-            .pipe(gulp.dest('./dist'));
+            .pipe(gulp.dest(config.base));
     }
 
 
@@ -260,21 +258,25 @@ export class Gulpfile {
         gulp.watch(config.styles.input, ['sass']);
     }
 
+    // Run Ahead of Time compilation prior to prodution build
     @Task('run-aot')
     runAot() {
         return gulp.src(['.'])
-        .pipe($.exec('touch ./src/app/app.module.ngfactory.ts'))
-        .pipe($.exec('node_modules/.bin/ngc -p ./src/tsconfig.aot.json'))
+        .pipe($.exec(config.commands.factory))
+        .pipe($.exec(config.commands.aot))
         .pipe($.exec.reporter(reportOptions));
     }
 
+    // Run rollup.js build task for production
     @Task('run-rollup')
     runRollup() {
         return gulp.src(['.'])
-        .pipe($.exec('node_modules/.bin/rollup -c rollup.js'))
+        .pipe($.exec(config.commands.rollup))
         .pipe($.exec.reporter(reportOptions));
     }
 
+    // Delete /node_modules/@types on production build
+    // This is needed as there is a current bug with Angular 2 Webpack build
     @Task('del-typings')
     delTypings() {
         return del(config.node_modules.typings).then(paths => {
@@ -282,29 +284,34 @@ export class Gulpfile {
         });
     }
 
+    // Optimize images on production build
     @Task('images')
     images() {
-        return gulp.src('./public/images/**/*')
+        return gulp.src(config.images.input)
             .pipe($.cache($.imagemin({ optimizationLevel: 3, progressive: true, interlaced: true })))
-            .pipe(gulp.dest('./dist/public/images/'));
+            .pipe(gulp.dest(config.images.output));
     }
 
+    // Minify and Gzip css file on production build
     @Task()
     styles() {
-        return gulp.src('./public/css/*')
+        return gulp.src(config.css.input)
         .pipe($.rename({suffix: '.min'}))
         .pipe($.cleancss())
         .pipe($.gzip( {append: false}))
-        .pipe(gulp.dest('./dist/public/css/'));
+        .pipe(gulp.dest(config.css.output));
     }
 
+    // Minify Html file on production build
     @Task()
     minify() {
-    return gulp.src('./dist/*.html')
+    return gulp.src(config.base + '*.html')
         .pipe($.htmlmin({collapseWhitespace: true}))
-        .pipe(gulp.dest('./dist'));
+        .pipe(gulp.dest(config.base));
     }
 
+    // Run a local development server on localhost:8080
+    // THis is run with build-aot to display the final build
     @Task('connect')
     connect() {
         $.connect.server({
@@ -315,6 +322,9 @@ export class Gulpfile {
         });
     }
 
+    // Run a test server on localhost:5000
+    // The port can be configured in .config.yml
+    // This task is used to display the Istanbul coverage reports
     @Task('connect-test')
     connectTest() {
         $.connect.server({
@@ -339,6 +349,7 @@ export class Gulpfile {
                 ];
     }
 
+    // Build and run development server using Webpack
     @SequenceTask('build-dev')
     buildDev() {
         return [
@@ -348,9 +359,12 @@ export class Gulpfile {
                 ];
     }
 
+    // Default gulp task
+    // Used to reset ENV variable
     @Task()
     default() {
         return ['replace-env', 'update-main'];
     }
 
 }
+

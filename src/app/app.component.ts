@@ -6,10 +6,5 @@ import '../../public/css/styles.css';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-    title = 'app works!';
-    foo = 'bar';
+    title = 'Hello from Angular 2 App with Webpack & AoT';
  }
-
-function doSomething() {
-    console.log('foo');
-}

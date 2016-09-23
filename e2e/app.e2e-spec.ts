@@ -7,8 +7,8 @@ describe('howard-angular App', function() {
     page = new HowardAngularPage();
   });
 
-  it('should display message saying Hello from Howard Angular 2 App with Webpack', () => {
+  it('should display message saying Hello from Angular 2 App with Webpack & AoT', () => {
     page.navigateTo();
-    expect(page.getParagraphText()).toEqual('Hello from Howard Angular 2 App with Webpack');
+    expect(page.getParagraphText()).toEqual('Hello from Angular 2 App with Webpack & AoT');
   });
 });
