@@ -1,5 +1,5 @@
 import { Gulpclass, Task, SequenceTask  } from 'gulpclass/Decorators';
-import { ensureImport, setTemplateFiles }  from './templates/';
+import { ensureImport, setTemplateFiles }  from './templates/template';
 
 const _ = require('lodash');
 
