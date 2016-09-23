@@ -186,7 +186,7 @@ export class Gulpfile {
 
     @Task('generate-clean')
     generateClean() {
-        return del(config.template.clean);
+        return del(config.template.output);
     }
 
     /* Clean Dist folder */
