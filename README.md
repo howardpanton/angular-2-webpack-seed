@@ -104,28 +104,27 @@ This will download the following files into your directory.
 `webpack.config.js` is the entrypoint for [Webpack](https://webpack.github.io/) build framework.
 
 
+
 ## Prerequisites
 
 * node v5.x.x or higher and npm 3 or higher.
 
- To get up and running with the UI repo you need the latest version of Node JS and NPM.
+To get up and running with the UI repo you need the latest version of Node JS and NPM.
  
-
-Make sure, that you have the supported versions of Node and NPM. If you have the
- older versions, uninstall node, download and install the required version.
+Make sure, that you have the supported versions of Node and NPM. If you have the older versions, uninstall node, download and install the required version.
 
 NPM is already integrated in the Node installer, so you don’t have to worry about manually upgrading it.
 
-[Node JS](https://nodejs.org/) is a Node.js is a platform built on 
-[Chrome's JavaScript runtime](http://code.google.com/p/v8/). Node can be 
-installed on the Mac and the engine can be used to run Gulp, Grunt or any other 
-javascript service. You can install Node from [here](http://nodejs.org/dist/v0.12.5/node-v0.12.5.pkg).
+[Node JS](https://nodejs.org/) is a Node.js is a platform built on [Chrome's JavaScript runtime](http://code.google.com/p/v8/). 
+You can install Node from [here](http://nodejs.org/dist/v0.12.5/node-v0.12.5.pkg).
 
 Once Node has been installed you can check the version of Node JS by entering the following into terminal/iterm
 
 ```
 node -v
 ```
+
+Install [Typescript](https://www.typescriptlang.org/) globally
 
 ```
 npm install -g typescript
@@ -134,7 +133,7 @@ npm install -g typescript
 
 ## Usage
 
-Next we need to install the `package.json` dependencies, enter the following command into terminal/Iterm.
+Next we need to install the `package.json` dependencies, enter the following command into Terminal/Iterm.
 
 ```bash
 
@@ -142,6 +141,9 @@ cd angular-2-webpack-seed
 
 # Install the project's dependencies
 npm install
+
+# Install any Bower dependencies
+bower install
 
 # Starts webpack development build and watches your files for changes
 # This will create a local devlopment server at http://locahost:8080
@@ -158,14 +160,19 @@ npm run e2e
 # Webpack build
 npm run build-webpack
 
-# AoT compilation and Rollup build
+# Webpack build and open build in browser on port 8080
+npm run build-webpack && gulp-connect && gulp-open
+
+# AoT compilation and Rollup build, the build will open in browser on port 8080
 npm run build-aot
+
 
 ```
 
+
 ## Options
 
-YOu can scaffold Angular files and change the development environment
+You can scaffold Angular files and change the development environment
 
 ```bash
 
@@ -210,17 +217,30 @@ gulp --env=development
 gulp --env=production
 
 ```
+
+
 ## Tests
 
-Tests have been setup with Jasmine, Karma and Istanbul. Unit test should be stored
-in `/src/app/` within the corresponding folders.
+Tests have been setup with Jasmine, Karma and Istanbul. Unit test should be stored in `/src/app/` within the corresponding folders.
 
-End to End tests should be stored in `./e2e/`
+End to End tests have been setup using protractor and should be stored in `./e2e/`
+
 
 ## Builds
 
-The default task is `gulp` and this will start the build system and watch for any changes in the css/js/app folders.
+The UI uses two build systems, Webpack and Rollup, you could also builds using SystemJs and gulp, but this will need some modifications to the Gulp file.
+You can run a build by typing the command `npm run build-webpack` or `npm run build-aot` this will start off the build process and clean up any unecessary files.
 
-You should see a message when the default gulp task is running to say that browsersync has initialised on localhost:7000.
+The main difference in the build systems is that webpack chunks the files as it processes the build and creates 3 files `app.js' `vendor.js` and `pollyfill.js`.
+Webpack will also package any assets the application requires such as css or images.
+
+The rollup build uses es2015 tree-shaking to remove any unecessary modules and it creates a single build file in `./dist`. AoT compilation will also be doe pre-build.
+
+All builds can be viewed by running `gulp connect open`, this will run a server at `localhost:8080`.
+
+If you need to change any port or path settings you can edit `./comfig.yml`.
+
 
 ## Issues
+
+There is currently an issue with Angular 2 webpack and the NPM `@types` module. To get around this bug, the `node_modules/@types` directory is removed at build time.
