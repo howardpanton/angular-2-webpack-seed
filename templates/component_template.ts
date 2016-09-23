@@ -1,4 +1,5 @@
-export const componentTemplate = { 'component': `
+export const componentTemplate = {
+'component': `
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -16,7 +17,6 @@ export class <%= name %>Component implements OnInit {
 }
 
 `,
-'css': '',
 'html': `
 <h1>
    <%= selector %> works!
@@ -35,6 +35,7 @@ describe('Component: <%= name %>', () => {
   });
 });
 
-`
+`,
+'css': ''
 
 };
