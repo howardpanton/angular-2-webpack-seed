@@ -108,7 +108,7 @@ export class Gulpfile {
             files.forEach(function(gfile: any){
                 stream
                     .pipe($.file(gfile.name, gfile.content))
-                    .pipe($.template({name: _.upperFirst(gfile.type), selector: gfile.type}))
+                    .pipe($.template({name: _.upperFirst(_.camelCase(gfile.type)), selector: gfile.type}))
                     .pipe(gulp.dest(config.template.output));
             });
             return stream;
