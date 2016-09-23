@@ -1,16 +1,31 @@
 {
-  "compileOnSave": false,
   "compilerOptions": {
-    "declaration": false,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
+    "target": "es5",
+    "outDir": "dist",
     "module": "commonjs",
     "moduleResolution": "node",
-    "outDir": "../dist/out-tsc-e2e",
     "sourceMap": true,
-    "target": "es5",
-    "typeRoots": [
-      "../node_modules/@types"
-    ]
-  }
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "removeComments": false,
+    "noImplicitAny": false,
+    "declaration": false
+  },
+  "exclude": [
+    "node_modules",
+    "typings/browser.d.ts",
+    "typings/browser",
+    "protractor.conf.js"
+  ],
+    "filesGlob": [
+    "./src/app/**/*.ts",
+    "./typings/index.d.ts",
+    "!./node_modules/**"
+  ],
+  "awesomeTypescriptLoaderOptions": {
+    "resolveGlobs": true,
+    "forkChecker": true
+    },
+  "compileOnSave": false,
+  "buildOnSave": false
 }
